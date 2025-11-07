@@ -4,8 +4,8 @@ function buildSite(site) {
 }
 
 // Choose wich site to show:
-buildSite(PAINTING_SITE);
-// buildSite(COOKING_SITE);
+// buildSite(PAINTING_SITE);
+buildSectionsAlt(COOKING_SITE.sections);
 // buildSite(PORTFOLIO_SITE);
 
 
