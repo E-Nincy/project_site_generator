@@ -79,9 +79,42 @@ function gallery(section) {
 }
 
 function contact(section) {
-  const el = make('section', '', 'contact');
-  if (section.header) el.append(make('h2', section.header));
-  return el;
+  // Create the contact section container
+  const container = make('section', '', 'contact-container');
+
+  // 1) header
+  if (section.hasOwnProperty('header')) {
+    container.append(make('h2', section.header));
+  }
+
+  // 2) email (as a mailto: link)
+  if (section.hasOwnProperty('email') && section.email) {
+    const emailLink = make('a', 'E-mail me');
+    emailLink.href = 'mailto:' + section.email;
+    container.append(emailLink);
+  }
+
+  // 3) phone
+  if (section.hasOwnProperty('phone') && section.phone) {
+    container.append(make('p', section.phone));
+  }
+
+  // 4) form (call the placeholder builder for now)
+  if (section.hasOwnProperty('form')) {
+    container.append(build_form(section.form));
+  }
+
+  // 5) images (pick one at random if provided)
+  if (section.hasOwnProperty('images') && Array.isArray(section.images) && section.images.length) {
+    const img = make('img', '', 'gallery-image');
+    img.src = chooseRandomItem(section.images);
+    img.alt = 'Contact image';
+    // Optional: remove the <img> if it fails to load
+    img.onerror = () => img.remove();
+    container.append(img);
+  }
+
+  return container;
 }
 
 function links(section) {
