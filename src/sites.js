@@ -60,6 +60,11 @@ const PAINTING_SITE = {
         { "type": "email", "label": "E-mail", "required": true }
       ],
       "images": ["https://raw.githubusercontent.com/CodingNomads/js_201_labs/master/resources/site_generator/painting_7.jpg"]
+    },
+    {
+      "type": "video",
+      "header": "Watch Our Work in Action",
+      "url": "https://www.youtube.com/embed/dQw4w9WgXcQ"
     }
   ]
 };

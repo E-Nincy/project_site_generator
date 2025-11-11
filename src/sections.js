@@ -6,7 +6,8 @@ const SECTION_TYPES = {
   text: text,
   gallery: gallery,
   contact: contact,
-  links: links
+  links: links,
+  video: video
 };
 
 function chooseRandomItem(array) {
@@ -63,17 +64,30 @@ function text(section) {
 }
 
 function gallery(section) {
-  // Create container for gallery
   const container = make('section', '', 'gallery-container');
+  const img = make('img', '', 'gallery-image');
+  let index = 0;
 
-  // Choose one random image from the array
-  const src = chooseRandomItem(section.images);
-  const image = make('img', '', 'gallery-image');
-  image.src = src;
-  image.alt = 'Gallery image';
+  if (section.images && section.images.length > 0) {
+    img.src = section.images[index];
+    img.alt = 'Gallery image';
+    container.append(img);
 
-  // Add the image to the container
-  container.append(image);
+    // Change each 5 seconds
+    let timer = setInterval(nextImage, 5000);
+
+    function nextImage() {
+      index = (index + 1) % section.images.length;
+      img.src = section.images[index];
+    }
+
+    // Resets the timer on click
+    img.addEventListener('click', () => {
+      clearInterval(timer);
+      nextImage();
+      timer = setInterval(nextImage, 5000);
+    });
+  }
 
   return container;
 }
@@ -125,4 +139,33 @@ function links(section) {
     el.lastChild.target = '_blank';
   });
   return el;
+}
+
+function video(section) {
+  const container = make('section', '', 'video-container');
+  if (section.header) container.append(make('h2', section.header));
+
+  const iframe = make('iframe');
+  if (!section.url) return container; // guard clause if no URL provided
+
+  iframe.src = section.url;
+  iframe.width = '560';
+  iframe.height = '315';
+  iframe.title = section.header || 'Embedded video';
+  iframe.setAttribute('allowfullscreen', ''); // standard attribute
+  // Optional: set other allow attributes
+  iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+
+  container.append(iframe);
+  return container;
+}
+
+// Reusable helper to append a random image from a section
+function addRandomImage(section, container) {
+  if (section.images && section.images.length > 0) {
+    const img = make('img', '', 'random-image');
+    img.src = chooseRandomItem(section.images);
+    img.alt = section.header || 'Section image';
+    container.append(img);
+  }
 }
